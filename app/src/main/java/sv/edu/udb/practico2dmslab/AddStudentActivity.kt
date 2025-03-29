@@ -1,64 +1,86 @@
+package sv.edu.udb.practico2dmslab
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import sv.edu.udb.practico2dmslab.databinding.ActivityAddStudentBinding
-import sv.edu.udb.practico2dmslab.model.Student
+import com.google.firebase.database.DatabaseReference
+
 
 class AddStudentActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityAddStudentBinding
-    private lateinit var database: DatabaseReference
+    private lateinit var studentsRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAddStudentBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_add_student)
+
+        val etFirstName = findViewById<EditText>(R.id.etFirstName)
+        val etLastName = findViewById<EditText>(R.id.etLastName)
+        val spGrade = findViewById<Spinner>(R.id.spGrade)
+        val spSubject = findViewById<Spinner>(R.id.spSubject)
+        val etFinalScore = findViewById<EditText>(R.id.etFinalScore)
+        val btnSave = findViewById<Button>(R.id.btnSave)
 
         // Configurar Spinners
-        val grades = arrayOf("1° Grado", "2° Grado", "3° Grado", "4° Grado", "5° Grado")
-        val subjects = arrayOf("Matemáticas", "Lenguaje", "Ciencias", "Sociales", "Inglés")
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.grades,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spGrade.adapter = adapter
+        }
 
-        val gradeAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, grades)
-        val subjectAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, subjects)
+        ArrayAdapter.createFromResource(
+            this,
+            R.array.subjects,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spSubject.adapter = adapter
+        }
 
-        binding.gradeSpinner.adapter = gradeAdapter
-        binding.subjectSpinner.adapter = subjectAdapter
+        studentsRef = FirebaseDatabase.getInstance().getReference("students")
 
-        binding.saveButton.setOnClickListener {
-            val name = binding.nameEditText.text.toString()
-            val lastName = binding.lastNameEditText.text.toString()
-            val grade = binding.gradeSpinner.selectedItem.toString()
-            val subject = binding.subjectSpinner.selectedItem.toString()
-            val scoreText = binding.scoreEditText.text.toString()
+        btnSave.setOnClickListener {
+            val firstName = etFirstName.text.toString().trim()
+            val lastName = etLastName.text.toString().trim()
+            val grade = spGrade.selectedItem.toString()
+            val subject = spSubject.selectedItem.toString()
+            val finalScoreText = etFinalScore.text.toString()
 
-            if (name.isEmpty() || lastName.isEmpty() || scoreText.isEmpty()) {
-                Toast.makeText(this, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
+            if (firstName.isEmpty() || lastName.isEmpty() || finalScoreText.isEmpty()) {
+                Toast.makeText(this, "Complete todos los campos", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val score = scoreText.toDouble()
-            if (score < 0 || score > 10) {
-                Toast.makeText(this, "La nota debe estar entre 0 y 10", Toast.LENGTH_SHORT).show()
+            val finalScore = try {
+                finalScoreText.toDouble()
+            } catch (e: NumberFormatException) {
+                Toast.makeText(this, "Nota inválida", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            database = FirebaseDatabase.getInstance().getReference("students")
-            val studentId = database.push().key
+            if (finalScore < 0 || finalScore > 10) {
+                Toast.makeText(this, "Nota debe ser 0-10", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-            val student = Student(studentId, name, lastName, grade, subject, score)
+            val student = Student(
+                firstName = firstName,
+                lastName = lastName,
+                grade = grade,
+                subject = subject,
+                finalScore = finalScore
+            )
 
-            studentId?.let {
-                database.child(it).setValue(student).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(this, "Estudiante registrado", Toast.LENGTH_SHORT).show()
-                        finish()
-                    } else {
-                        Toast.makeText(this, "Error al registrar", Toast.LENGTH_SHORT).show()
-                    }
+            studentsRef.push().setValue(student)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Estudiante agregado", Toast.LENGTH_SHORT).show()
+                    finish()
                 }
-            }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Error al guardar", Toast.LENGTH_SHORT).show()
+                }
         }
     }
 }

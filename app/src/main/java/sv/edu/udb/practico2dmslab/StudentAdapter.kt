@@ -1,51 +1,44 @@
+package sv.edu.udb.practico2dmslab
+
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import sv.edu.udb.practico2dmslab.R
-import sv.edu.udb.practico2dmslab.model.Student
 
-class StudentAdapter(private val studentList: ArrayList<Student>) :
-    RecyclerView.Adapter<StudentAdapter.StudentViewHolder>() {
+class StudentAdapter(private val context: Context) : RecyclerView.Adapter<StudentAdapter.StudentViewHolder>() {
+    private var students = mutableListOf<Student>()
 
-    private var listener: OnItemClickListener? = null
+    inner class StudentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val tvName: TextView = itemView.findViewById(R.id.tvName)
+        private val tvGrade: TextView = itemView.findViewById(R.id.tvGrade)
+        private val tvSubject: TextView = itemView.findViewById(R.id.tvSubject)
+        private val tvScore: TextView = itemView.findViewById(R.id.tvScore)
 
-    interface OnItemClickListener {
-        fun onItemClick(position: Int)
-    }
-
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        this.listener = listener
+        fun bind(student: Student) {
+            tvName.text = "${student.firstName} ${student.lastName}"
+            tvGrade.text = student.grade
+            tvSubject.text = student.subject
+            tvScore.text = student.finalScore.toString()
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudentViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.student_item, parent, false)
-        return StudentViewHolder(itemView, listener)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_student, parent, false)
+        return StudentViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: StudentViewHolder, position: Int) {
-        val currentItem = studentList[position]
-        holder.name.text = "${currentItem.name} ${currentItem.lastName}"
-        holder.grade.text = currentItem.grade
-        holder.subject.text = currentItem.subject
-        holder.score.text = currentItem.score.toString()
+        holder.bind(students[position])
     }
 
-    override fun getItemCount(): Int = studentList.size
+    override fun getItemCount() = students.size
 
-    class StudentViewHolder(itemView: View, listener: OnItemClickListener?) :
-        RecyclerView.ViewHolder(itemView) {
-        val name: TextView = itemView.findViewById(R.id.studentName)
-        val grade: TextView = itemView.findViewById(R.id.studentGrade)
-        val subject: TextView = itemView.findViewById(R.id.studentSubject)
-        val score: TextView = itemView.findViewById(R.id.studentScore)
-
-        init {
-            itemView.setOnClickListener {
-                listener?.onItemClick(adapterPosition)
-            }
-        }
+    fun setStudents(newStudents: List<Student>) {
+        students.clear()
+        students.addAll(newStudents)
+        notifyDataSetChanged()
     }
 }

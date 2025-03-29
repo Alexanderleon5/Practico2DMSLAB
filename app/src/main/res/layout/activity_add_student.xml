@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="@color/colorPrimaryLight">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,81 +9,43 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_student_title"
-            android:textSize="20sp"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_marginBottom="24dp"/>
-
-        <com.google.android.material.textfield.TextInputLayout
+        <EditText
+            android:id="@+id/etFirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp">
+            android:hint="Nombre"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/nameEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/name_hint"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
+        <EditText
+            android:id="@+id/etLastName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp">
+            android:hint="Apellido"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/lastNameEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/last_name_hint"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
+        <Spinner
+            android:id="@+id/spGrade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/grade_hint">
+            android:layout_marginTop="8dp"/>
 
-            <Spinner
-                android:id="@+id/gradeSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
+        <Spinner
+            android:id="@+id/spSubject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/subject_hint">
+            android:layout_marginTop="8dp"/>
 
-            <Spinner
-                android:id="@+id/subjectSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
+        <EditText
+            android:id="@+id/etFinalScore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/scoreEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/score_hint"
-                android:inputType="numberDecimal"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginTop="8dp"
+            android:hint="Nota Final"
+            android:inputType="numberDecimal"/>
 
         <Button
-            android:id="@+id/saveButton"
+            android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/save_button"
-            android:backgroundTint="@color/colorPrimary"
-            android:textColor="@android:color/white"/>
+            android:layout_marginTop="16dp"
+            android:text="Guardar"/>
     </LinearLayout>
 </ScrollView>

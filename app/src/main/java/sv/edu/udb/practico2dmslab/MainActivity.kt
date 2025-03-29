@@ -1,34 +1,55 @@
+package sv.edu.udb.practico2dmslab
+
 import android.content.Intent
-import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
-import sv.edu.udb.practico2dmslab.databinding.ActivityMainBinding
+import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.database.*
+import android.widget.Toast
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var studentsRef: DatabaseReference
+    private lateinit var adapter: StudentAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
 
-        firebaseAuth = FirebaseAuth.getInstance()
+        val rvStudents = findViewById<RecyclerView>(R.id.rvStudents)
+        val fabAddStudent = findViewById<FloatingActionButton>(R.id.fabAddStudent)
 
-        binding.addStudentButton.setOnClickListener {
+        rvStudents.layoutManager = LinearLayoutManager(this)
+        adapter = StudentAdapter(this)
+        rvStudents.adapter = adapter
+
+        studentsRef = FirebaseDatabase.getInstance().getReference("students")
+
+        loadStudents()
+
+        fabAddStudent.setOnClickListener {
             startActivity(Intent(this, AddStudentActivity::class.java))
         }
+    }
 
-        binding.viewStudentsButton.setOnClickListener {
-            startActivity(Intent(this, StudentListActivity::class.java))
-        }
+    private fun loadStudents() {
+        studentsRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val students = mutableListOf<Student>()
+                for (studentSnapshot in snapshot.children) {
+                    val student = studentSnapshot.getValue(Student::class.java)
+                    student?.id = studentSnapshot.key
+                    student?.let { students.add(it) }
+                }
+                adapter.setStudents(students)
+            }
 
-        binding.logoutButton.setOnClickListener {
-            firebaseAuth.signOut()
-            Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-        }
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@MainActivity, "Error al cargar", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
