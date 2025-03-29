@@ -20,7 +20,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize Firebase Auth
+
         auth = Firebase.auth
 
         binding.btnLogin.setOnClickListener {
@@ -31,13 +31,13 @@ class LoginActivity : AppCompatActivity() {
                 auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            // Sign in success
+
                             Log.d("LoginActivity", "signInWithEmail:success")
                             val intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)
                             finish()
                         } else {
-                            // If sign in fails
+
                             Log.w("LoginActivity", "signInWithEmail:failure", task.exception)
                             Toast.makeText(
                                 baseContext, "Authentication failed.",
