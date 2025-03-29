@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "842044435952",
+    "project_id": "kotlin-firebase-774bf",
+    "storage_bucket": "kotlin-firebase-774bf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842044435952:android:41e9441d1d816e989c8135",
+        "android_client_info": {
+          "package_name": "edu.udb.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAV9l_EIDI9rY4UyIElfSV9EFKPGZQSVQg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842044435952:android:e6fa4dc0d09b9b519c8135",
+        "android_client_info": {
+          "package_name": "sv.edu.udb.practico2dmslab"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAV9l_EIDI9rY4UyIElfSV9EFKPGZQSVQg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

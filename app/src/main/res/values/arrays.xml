@@ -1,0 +1,17 @@
+<resources>
+    <string-array name="grades">
+        <item>1° Grado</item>
+        <item>2° Grado</item>
+        <item>3° Grado</item>
+        <item>4° Grado</item>
+        <item>5° Grado</item>
+    </string-array>
+
+    <string-array name="subjects">
+        <item>Matemáticas</item>
+        <item>Ciencias</item>
+        <item>Historia</item>
+        <item>Lenguaje</item>
+        <item>Arte</item>
+    </string-array>
+</resources>
